@@ -9,6 +9,6 @@ const userStore = useUserStore();
 
 <template>
     <div>
-        <h2>Pagina principal - {{ userStore.userData }}</h2>
+        <h2>Pagina principal</h2>
     </div>
 </template>
