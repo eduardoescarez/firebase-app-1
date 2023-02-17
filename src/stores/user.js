@@ -4,4 +4,5 @@ export const useUserStore = defineStore("user", {
     state: () => ({
         userData: "bluuweb@test.com",
     }),
+    actions: {},
 });

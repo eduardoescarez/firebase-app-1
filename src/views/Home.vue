@@ -1,12 +1,14 @@
 <script setup>
 
 
-import { useUserStore } from "../stores/user";
+import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 
 
 </script>
 
 <template>
-    <h2>Pagina principal - {{ userStore.userData }}</h2>
+    <div>
+        <h2>Pagina principal - {{ userStore.userData }}</h2>
+    </div>
 </template>
