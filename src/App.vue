@@ -1,5 +1,8 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import { useUserStore } from './stores/user';
+
+const userStore = useUserStore();
 
 </script>
 
@@ -9,7 +12,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to ="/">Home</RouterLink> | 
         <RouterLink to ="/register">Registro</RouterLink> | 
         <RouterLink to ="/login">Login</RouterLink> |
-        <button>Logout</button>
+        <button @click="userStore.logoutUser">Logout</button>
     </nav>
   <RouterView />
 </template>

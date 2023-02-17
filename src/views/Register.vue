@@ -2,10 +2,10 @@
 
 import { ref } from "vue";
 import { useUserStore } from "../stores/user";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
-const router = useRouter();
+// const router = useRouter();
 
 const email = ref("");
 const password = ref("");
@@ -16,7 +16,7 @@ const handleSubmit = async() => {
         return alert("llena los campos");
     }
     await userStore.registerUser(email.value, password.value);
-    router.push("/");
+    // router.push("/");
 }
 
 </script>
@@ -28,7 +28,7 @@ const handleSubmit = async() => {
         <form @submit.prevent="handleSubmit">  
             <input type="email" placeholder="Ingrese email" v-model.trim="email">
             <input type="password" placeholder="Ingrese contraseña" v-model.trim="password">
-            <button type="submit">Crear usuario</button>
+            <button type="submit" :disabled="userStore.loadingUser">Crear usuario</button>
         </form>
         
     </div>
