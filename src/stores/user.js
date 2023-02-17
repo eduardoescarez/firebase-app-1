@@ -1,8 +1,19 @@
 import { defineStore } from "pinia";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/firebaseConfig";
 
-export const useUserStore = defineStore("user", {
+export const useUserStore = defineStore("userStore", {
     state: () => ({
-        userData: "bluuweb@test.com",
+        userData: null,
     }),
-    actions: {},
+    actions: {
+        async registerUser(email, password){
+            try{
+                const {user} = await createUserWithEmailAndPassword(auth, email, password);
+                this.userData = {email: user.email, uid:user.uid}
+            } catch (error){
+                console.log(error);
+            }
+        }
+    },
 });
