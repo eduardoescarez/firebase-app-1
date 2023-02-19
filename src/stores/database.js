@@ -4,12 +4,19 @@ import { defineStore } from "pinia";
 
 export const useDatabaseStore = defineStore("database", {
     state: () =>({  
-        documents: []
-
+        documents: [],
+        loadingDoc: false,
     }),
 
     actions: {
         async getUrls() {
+
+            if (this.documents.length !== 0)
+            {
+                return;
+            }
+
+            this.loadingDoc = true;
             try {
                 const q = query(collection(db, "urls"), where("user", "==", auth.currentUser.uid));
                 const querySnapshot = await getDocs(q);
@@ -23,6 +30,7 @@ export const useDatabaseStore = defineStore("database", {
                 console.log(error);
             }
             finally{
+                this.loadingDoc = false;
             }
         }
     }

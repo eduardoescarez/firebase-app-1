@@ -12,7 +12,8 @@ databaseStore.getUrls();
     <div>
         <h2>Pagina principal</h2>
         <p>{{ userStore.userData?.email }}</p>
-        <ul>
+        <p v-if="databaseStore.loadingDoc"> cargando documentos...</p>
+        <ul v-else>
             <li v-for="item in databaseStore.documents" :key="item.id">
                 {{ item.id }} : {{ item.name }} - {{  item.short }}
             </li>
