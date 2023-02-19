@@ -4,12 +4,14 @@ import Home from "@/views/Home.vue"
 
 const requireAuth = async(to,before,next) => {
     const userStore = useUserStore();
+    userStore.loadingSession = true;
     const user = await userStore.currentUser();
     if (user){
         next();
     } else {
         next("/login");
     }
+    userStore.loadingSession = false;
 }
 
 const router = createRouter({

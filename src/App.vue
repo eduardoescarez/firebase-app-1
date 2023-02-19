@@ -8,12 +8,15 @@ const userStore = useUserStore();
 
 <template>
     <h1>App</h1>
-    <nav> 
-        <RouterLink to ="/">Home</RouterLink> | 
-        <RouterLink to ="/register">Registro</RouterLink> | 
-        <RouterLink to ="/login">Login</RouterLink> |
-        <button @click="userStore.logoutUser">Logout</button>
+    <nav v-if="!userStore.loadingSession"> 
+        <RouterLink to ="/" v-if="userStore.userData">Home</RouterLink> | 
+        <RouterLink to ="/register" v-if="!userStore.userData">Registro</RouterLink> | 
+        <RouterLink to ="/login" v-if="!userStore.userData">Login</RouterLink> |
+        <button @click="userStore.logoutUser" v-if="userStore.userData">Logout</button>
     </nav>
+    <div v-else>
+        Cargando usuario...
+    </div>
   <RouterView />
 </template>
 
