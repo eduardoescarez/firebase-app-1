@@ -1,6 +1,7 @@
-import { collection, query, getDocs, where } from "firebase/firestore/lite";
+import { collection, query, getDocs, getDoc, where, addDoc, doc, deleteDoc} from "firebase/firestore/lite";
 import { db, auth } from "../firebase/firebaseConfig";
 import { defineStore } from "pinia";
+import { nanoid } from "nanoid";
 
 export const useDatabaseStore = defineStore("database", {
     state: () =>({  
@@ -27,10 +28,45 @@ export const useDatabaseStore = defineStore("database", {
                     })
                 }); 
             } catch(error){
-                console.log(error);
             }
             finally{
                 this.loadingDoc = false;
+            }
+        },
+        async addUrls(name) {
+            try{
+                const objetoDoc = {
+                    name: name,
+                    short: nanoid(6),
+                    user: auth.currentUser.uid
+                }
+                const docRef = await addDoc(collection(db, "urls"), objetoDoc);
+                this.documents.push({
+                    ...objetoDoc,
+                    id: docRef.id
+                })
+            }catch(error){
+            }
+            finally{
+            }
+        },
+        async deleteUrl(id){
+            try{
+                const docRef = doc(db, "urls", id);
+
+                const docSnap = await getDoc(docRef);
+                if (!docSnap.exists()){
+                    throw new Error("No existe este documento");
+                }
+                if (docSnap.data().user !== auth.currentUser.uid){
+                    throw new Error("Error de acceso al documento");
+                }
+                await deleteDoc(docRef);
+                this.documents = this.documents.filter(item => item.id !== id)
+            } catch(error){
+                console.log(error.message)
+            }
+            finally {
             }
         }
     }
