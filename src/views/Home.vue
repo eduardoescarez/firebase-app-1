@@ -2,9 +2,11 @@
 import { ref } from "vue";
 import { useUserStore } from "../stores/user";
 import { useDatabaseStore } from "../stores/database";
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const databaseStore = useDatabaseStore();
+const router = useRouter();
 
 const url = ref("");
 const handleSubmit = () =>{
@@ -30,6 +32,7 @@ databaseStore.getUrls();
             <li v-for="item in databaseStore.documents" :key="item.id">
                 {{ item.id }} : {{ item.name }} - {{  item.short }}
                 <br>
+                <button @click="router.push(`/editar/${item.id}`)">Editar</button>
                 <button @click="databaseStore.deleteUrl(item.id)">Eliminar</button>
             </li>
         </ul>

@@ -1,7 +1,8 @@
-import { collection, query, getDocs, getDoc, where, addDoc, doc, deleteDoc} from "firebase/firestore/lite";
-import { db, auth } from "../firebase/firebaseConfig";
+import { collection, query, getDocs, getDoc, where, addDoc, doc, deleteDoc, updateDoc} from "firebase/firestore/lite";
+import { db, auth } from "@/firebase/firebaseConfig";
 import { defineStore } from "pinia";
 import { nanoid } from "nanoid";
+import  router from "../router/index";
 
 export const useDatabaseStore = defineStore("database", {
     state: () =>({  
@@ -47,7 +48,39 @@ export const useDatabaseStore = defineStore("database", {
                 })
             }catch(error){
             }
-            finally{
+        },
+        async readUrl(id){
+            try{
+                const docRef = doc(db, "urls", id);
+                const docSnap = await getDoc(docRef);
+                if (!docSnap.exists()){
+                    throw new Error("No existe este documento");
+                }
+                if (docSnap.data().user !== auth.currentUser.uid){
+                    throw new Error("Error de acceso al documento");
+                }
+                return docSnap.data().name
+            } catch(error){
+            }
+        },
+        async updateUrl(id, name){
+            try{
+                const docRef = doc(db, "urls", id);
+
+                const docSnap = await getDoc(docRef);
+                if (!docSnap.exists()){
+                    throw new Error("No existe este documento");
+                }
+                if (docSnap.data().user !== auth.currentUser.uid){
+                    throw new Error("Error de acceso al documento");
+                }
+                await updateDoc(docRef, {
+                    name: name
+                })
+                
+                this.documents = this.documents.map(item => item.id === id ? ({...item, name: name}) : item);
+                router.push("/");
+            }catch(error){
             }
         },
         async deleteUrl(id){
@@ -64,9 +97,6 @@ export const useDatabaseStore = defineStore("database", {
                 await deleteDoc(docRef);
                 this.documents = this.documents.filter(item => item.id !== id)
             } catch(error){
-                console.log(error.message)
-            }
-            finally {
             }
         }
     }
