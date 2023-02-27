@@ -8,6 +8,9 @@ const userStore = useUserStore();
 
 <template>
     <h1>App</h1>
+
+    <a-button type="primary" size="large">Boton</a-button>
+
     <nav v-if="!userStore.loadingSession"> 
         <RouterLink to ="/" v-if="userStore.userData">Home</RouterLink> | 
         <RouterLink to ="/register" v-if="!userStore.userData">Registro</RouterLink> | 
