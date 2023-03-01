@@ -26,18 +26,18 @@ const router = createRouter({
     },
     {
         path: '/editar/:id',
-        name: 'editar',
+        name: 'edit',
         component: Edit,
         beforeEnter: requireAuth
     },
     {
         path: '/login',
-        name: 'Login',
+        name: 'login',
         component: () => import('../views/Login.vue')
     },
     {
         path: '/register',
-        name: 'Register',
+        name: 'register',
         component: () => import('../views/Register.vue')
     }
   ]

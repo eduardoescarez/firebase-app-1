@@ -24,7 +24,7 @@ const handleSubmit = async() => {
 
 <template>
     <div>
-        <h2>Pagina de acceso</h2>
+        <h2>Acceso</h2>
         <form @submit.prevent="handleSubmit">  
             <input type="email" v-model.trim="email">
             <input type="password" v-model.trim="password">

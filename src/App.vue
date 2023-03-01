@@ -1,25 +1,44 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import { useUserStore } from './stores/user';
+import { RouterLink, RouterView } from "vue-router"
+import { useUserStore } from "./stores/user";
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 
 const userStore = useUserStore();
+const route = useRoute();
+const selectedKeys = ref(["login"]);
+
+// console.log(route.name);
+
+watch(() => route.name, () => {selectedKeys.value = [route.name]} );
+
 
 </script>
 
 <template>
-    <h1>App</h1>
-
-    <a-button type="primary" size="large">Boton</a-button>
-
-    <nav v-if="!userStore.loadingSession"> 
-        <RouterLink to ="/" v-if="userStore.userData">Home</RouterLink> | 
-        <RouterLink to ="/register" v-if="!userStore.userData">Registro</RouterLink> | 
-        <RouterLink to ="/login" v-if="!userStore.userData">Login</RouterLink> |
-        <button @click="userStore.logoutUser" v-if="userStore.userData">Logout</button>
-    </nav>
-    <div v-else>
-        Cargando usuario...
-    </div>
-  <RouterView />
+    <a-layout>
+        <a-layout-header>
+            <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }">
+                <a-menu-item v-if="userStore.userData" key="home">
+                    <RouterLink to ="/" >Home</RouterLink>
+                </a-menu-item>
+                <a-menu-item v-if="!userStore.userData" key="login">
+                    <RouterLink to ="/login">Login</RouterLink>
+                </a-menu-item>
+                <a-menu-item v-if="!userStore.userData" key="register">
+                    <RouterLink to ="/register">Registro</RouterLink>
+                </a-menu-item>
+                <a-menu-item @click="userStore.logoutUser" v-if="userStore.userData" key="logout">
+                    Logout
+                </a-menu-item>
+            </a-menu>
+        </a-layout-header>
+        <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }">
+            <a-layout-content style="padding: 0 50px">
+                <div v-if="userStore.loadingSession">Cargando usuario...</div>
+                <RouterView />
+            </a-layout-content>
+        </div>
+    </a-layout>
 </template>
 
