@@ -22,6 +22,8 @@ databaseStore.getUrls();
         <h2>Pagina principal</h2>
         <p>{{ userStore.userData?.email }}</p>
 
+        <add-form></add-form>
+
         <form @submit.prevent="handleSubmit">
             <input type="text" placeholder="Ingrese una URL" v-model="url">
             <button type="submit">Enviar</button>
