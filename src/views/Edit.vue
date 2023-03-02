@@ -1,34 +1,50 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, reactive } from "vue";
+import { useRoute } from "vue-router";
 import { useDatabaseStore } from "../stores/database";
+import { message } from "ant-design-vue";
 
 const route = useRoute();
+
 const databaseStore = useDatabaseStore();
-const url = ref("");
-const handleSubmit = () => {
 
-    // validaciones del input por ingresar
-
-    databaseStore.updateUrl(route.params.id, url.value)
-}
+const editForm = reactive({
+    url:"",
+})
 
 onMounted(async() => {
-    url.value = await databaseStore.readUrl(route.params.id);
+    editForm.url = await databaseStore.readUrl(route.params.id);
 })
+
+
+
+const onFinish = async (value) => {
+    const error = await databaseStore.updateUrl(route.params.id, editForm.url)
+    if (!error){
+        editForm.url = "";
+        return message.success("URL editada");
+    }
+    switch (error){ // requiere agregar los errores de firestore
+        default:
+            message.error ("Ocurrió un error en el servidor. Intentelo más tarde")
+        break;
+    }
+}
 </script>
 
 <template>
 
-    <div>
-        <h1>Editar id: {{ route.params.id }}</h1>
-    </div>
+    
+    <h1 class="text-center">Editar id: {{ route.params.id }}</h1>
+    
+    <a-form name="editForm" autocomplete="off" layout="vertical" :model="editForm" @finish="onFinish">
+        <a-form-item name="url" label="Edita la URL" :rules="[{required: true, whitespace: true, pattern: /^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/, message: 'Ingresa una URL válida'}]">
+            <a-input v-model:value="editForm.url"></a-input>
+        </a-form-item>
+        <a-form-item>
+            <a-button type="primary" html-type="submit" :loading="databaseStore.loadingEdiDoc" :disabled="databaseStore.loadingEdiDoc" >Editar URL</a-button>
+        </a-form-item>
+    </a-form>
 
-    <div>
-        <form @submit.prevent="handleSubmit">
-            <input type="text" placeholder="Ingrese una URL" v-model="url">
-            <button type="submit">Enviar</button>
-        </form>
-    </div>
 
 </template>

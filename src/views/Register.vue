@@ -48,9 +48,7 @@ const onFinishFailed = errorInfo => {
 
 
 <template>
-    <a-row>
-        <a-col :xs="{ span: 24 }" :sm="{ span: 18, offset: 3 }" :lg="{ span: 12, offset: 6 }"><h2>Registro de usuarios</h2></a-col>
-    </a-row>
+    <h1 class="text-center">Registro de usuarios</h1>
     <a-row>
         <a-col :xs="{ span: 24 }" :sm="{ span: 18, offset: 3 }" :lg="{ span: 12, offset: 6 }">
         <a-form name="login" layout="vertical" :model="formModel" @finish="handleSubmit" @finishFailed="onFinishFailed">  

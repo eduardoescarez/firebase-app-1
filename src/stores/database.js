@@ -10,6 +10,7 @@ export const useDatabaseStore = defineStore("database", {
         loadingGetDoc: false,
         loadingAddDoc: false,
         loadingDelDoc: false,
+        loadingEdiDoc: false,
     }),
 
     actions: {
@@ -71,6 +72,7 @@ export const useDatabaseStore = defineStore("database", {
             }
         },
         async updateUrl(id, name){
+            this.loadingEdiDoc = true;
             try{
                 const docRef = doc(db, "urls", id);
 
@@ -87,7 +89,11 @@ export const useDatabaseStore = defineStore("database", {
                 
                 this.documents = this.documents.map(item => item.id === id ? ({...item, name: name}) : item);
                 router.push("/");
-            }catch(error){
+            } catch(error) {
+                console.log(error);
+                return error.message;
+            } finally {
+                this.loadingEdiDoc = false;
             }
         },
         async deleteUrl(id){

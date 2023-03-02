@@ -26,7 +26,7 @@ databaseStore.getUrls();
 
 <template>
     <div>
-        <h2>Pagina principal</h2>
+        <h1 class="text-center">Listado de URLs</h1>
         <add-form></add-form>
         <p>{{ userStore.userData?.email }}</p>
 

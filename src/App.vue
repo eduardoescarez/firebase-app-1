@@ -33,12 +33,24 @@ watch(() => route.name, () => {selectedKeys.value = [route.name]} );
                 </a-menu-item>
             </a-menu>
         </a-layout-header>
-        <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }">
-            <a-layout-content style="padding: 0 50px">
+        <a-layout-content style="padding: 0 50px">
+            <div class="container">
                 <div v-if="userStore.loadingSession">Cargando usuario...</div>
-                <RouterView />
-            </a-layout-content>
-        </div>
+                <router-view></router-view>
+            </div>
+        </a-layout-content>
     </a-layout>
 </template>
 
+<style>
+
+.container{
+    background-color: #fff;
+    padding: 24px;
+    min-height: calc(100vh - 64px);
+}
+
+.text-center{
+    text-align: center;
+}
+</style>
