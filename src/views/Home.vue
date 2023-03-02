@@ -16,16 +16,18 @@ databaseStore.getUrls();
         <h2>Pagina principal</h2>
         <p>{{ userStore.userData?.email }}</p>
 
-        <add-form></add-form>
+        <p v-if="databaseStore.loadingGetDoc">cargando documentos...</p>
 
-        <p v-if="databaseStore.loadingDoc">cargando documentos...</p>
-        <ul v-else>
-            <li v-for="item in databaseStore.documents" :key="item.id">
-                {{ item.id }} : {{ item.name }} - {{  item.short }}
-                <br>
-                <button @click="router.push(`/editar/${item.id}`)">Editar</button>
-                <button @click="databaseStore.deleteUrl(item.id)">Eliminar</button>
-            </li>
-        </ul>
+        <a-space direction ="vertical" v-if="!databaseStore.loadingGetDoc" style="width:100%">
+            <a-card v-for="item in databaseStore.documents" :key="item.id" :title="item.short">
+                <template #extra>
+                    <a-space>
+                        <a-button type="primary" @click="router.push(`/editar/${item.id}`)">Editar</a-button>
+                        <a-button danger @click="databaseStore.deleteUrl(item.id)">Eliminar</a-button>
+                    </a-space>
+                </template>
+                <p>{{ item.name }}</p>
+            </a-card>
+        </a-space>
     </div>
 </template>
