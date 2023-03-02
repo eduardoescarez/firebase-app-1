@@ -9,6 +9,7 @@ export const useDatabaseStore = defineStore("database", {
         documents: [],
         loadingGetDoc: false,
         loadingAddDoc: false,
+        loadingDelDoc: false,
     }),
 
     actions: {
@@ -90,6 +91,7 @@ export const useDatabaseStore = defineStore("database", {
             }
         },
         async deleteUrl(id){
+            this.loadingDelDoc = true;
             try{
                 const docRef = doc(db, "urls", id);
 
@@ -103,6 +105,9 @@ export const useDatabaseStore = defineStore("database", {
                 await deleteDoc(docRef);
                 this.documents = this.documents.filter(item => item.id !== id)
             } catch(error){
+                return error.message;
+            } finally {
+                this.loadingDelDoc = false;
             }
         }
     }
