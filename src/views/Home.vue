@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from "vue";
 import { useUserStore } from "../stores/user";
 import { useDatabaseStore } from "../stores/database";
 import { useRouter } from "vue-router";
@@ -8,13 +7,8 @@ const userStore = useUserStore();
 const databaseStore = useDatabaseStore();
 const router = useRouter();
 
-const url = ref("");
-const handleSubmit = () =>{
-    // validaciones de URL...
-    databaseStore.addUrls(url.value);
-}
-
 databaseStore.getUrls();
+
 </script>
 
 <template>
@@ -23,11 +17,6 @@ databaseStore.getUrls();
         <p>{{ userStore.userData?.email }}</p>
 
         <add-form></add-form>
-
-        <form @submit.prevent="handleSubmit">
-            <input type="text" placeholder="Ingrese una URL" v-model="url">
-            <button type="submit">Enviar</button>
-        </form>
 
         <p v-if="databaseStore.loadingDoc">cargando documentos...</p>
         <ul v-else>

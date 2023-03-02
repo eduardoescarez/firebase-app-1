@@ -1,12 +1,25 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive } from "vue";
+import { useDatabaseStore } from "../stores/database";
+import { message } from "ant-design-vue";
+
+const databaseStore = useDatabaseStore();
 
 const addForm = reactive({
-    url:''
+    url:"",
 })
 
-const onFinish = (value) => {
-    console.log("Resultado:" + value)
+const onFinish = async (value) => {
+    const error = await databaseStore.addUrls(addForm.url);
+    if (!error){
+        addForm.url = "";
+        return message.success("URL agregada");
+    }
+    switch (error){ // requiere agregar los errores de firestore
+        default:
+            message.error ("Ocurrió un error en el servidor. Intentelo más tarde")
+        break;
+    }
 }
 </script>
 
@@ -16,7 +29,7 @@ const onFinish = (value) => {
             <a-input v-model:value="addForm.url"></a-input>
         </a-form-item>
         <a-form-item>
-            <a-button type="primary" html-type="submit">Agregar URL</a-button>
+            <a-button type="primary" html-type="submit" :loading="databaseStore.loadingAddDoc" :disabled="databaseStore.loadingAddDoc" >Agregar URL</a-button>
         </a-form-item>
     </a-form>
 </template>
