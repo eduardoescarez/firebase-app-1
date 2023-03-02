@@ -2,6 +2,7 @@
 
 import { reactive } from "vue";
 import { useUserStore } from "../stores/user";
+import { message } from "ant-design-vue";
 
 
 const userStore = useUserStore();
@@ -13,7 +14,20 @@ const formModel = reactive({
 })
 
 const handleSubmit = async() => {
-    await userStore.registerUser(email.value, password.value);
+    const error = await userStore.registerUser(formModel.email, formModel.password);
+
+    if (!error) { 
+        return message.success("Cuenta creada satisfactoriamente");
+    }
+
+    switch (error){
+        case "auth/email-already-in-use":
+            message.error("Esta cuenta ya esta creada");
+            break;
+        default:
+            message.error("Problema de backend, intente nuevamente más tarde");
+            break;
+    }
 }
 
 const validatePassword = async(_rule, value) => {
@@ -27,7 +41,7 @@ const validatePassword = async(_rule, value) => {
 }
 
 const onFinishFailed = errorInfo => {
-      console.log('Failed:', errorInfo);
+      return message.error("Hay un error en el formulario");
 };
 
 </script>

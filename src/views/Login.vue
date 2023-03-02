@@ -3,6 +3,8 @@
 import { reactive } from "vue";
 import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
+import { message } from "ant-design-vue";
+
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -14,9 +16,25 @@ const formModel = reactive({
 })
 
 const handleSubmit = async() => {
-    await userStore.loginUser(formModel.email, formModel.password);
+    const error = await userStore.loginUser(formModel.email, formModel.password);
     router.push("/");
-}
+
+    if (!error) { 
+        return;
+    }
+
+    switch (error){
+        case "auth/user-not-found":
+            message.error("No existe esta cuenta");
+            break;
+        case "auth/wrong-password":
+            message.error("Error de contraseña");
+            break;
+        default:
+            message.error("Problema de backend, intente nuevamente más tarde");
+            break;
+    }
+};
 
 const onFinishFailed = errorInfo => {
       console.log('Failed:', errorInfo);
