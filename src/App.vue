@@ -8,8 +8,6 @@ const userStore = useUserStore();
 const route = useRoute();
 const selectedKeys = ref(["login"]);
 
-// console.log(route.name);
-
 watch(() => route.name, () => {selectedKeys.value = [route.name]} );
 
 
@@ -21,6 +19,9 @@ watch(() => route.name, () => {selectedKeys.value = [route.name]} );
             <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }">
                 <a-menu-item v-if="userStore.userData" key="home">
                     <RouterLink to ="/" >Home</RouterLink>
+                </a-menu-item>
+                <a-menu-item v-if="userStore.userData" key="profile">
+                    <RouterLink to ="/profile">Perfil</RouterLink>
                 </a-menu-item>
                 <a-menu-item v-if="!userStore.userData" key="login">
                     <RouterLink to ="/login">Login</RouterLink>
